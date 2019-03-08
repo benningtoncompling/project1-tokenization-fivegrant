@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 import sys, re
-
 with open(sys.argv[1], 'r') as input:
     input = input.read()
     input = re.sub(r'<.*>', r' ', input)
