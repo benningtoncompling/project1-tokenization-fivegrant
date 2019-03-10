@@ -177,5 +177,5 @@ def step5(word):
 def stemmer(words):
     stems =[]
     for word in words:
-        stems.append(step5(step4(step3(step2(step1(word)))))) #I<3Parenthesises
+        stems.append(step5(step4(step3(step2(step1(word)))))) #I<3Parentheses
     return stems
