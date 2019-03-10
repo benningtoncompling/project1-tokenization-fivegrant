@@ -30,7 +30,7 @@ def s(w):
         return False
 
 def m(w):
-    count = re.findall(r'[^AEIOU\W][AEIOUY]', w):
+    count = re.findall(r'[^AEIOU\W][AEIOUY]', w)
     return len(count)
 
 # Manipulator
@@ -42,8 +42,8 @@ def manipulate(word, cases, count = False):
     for condition, before, after in cases:
         iterations += 1
         if condition:
-            if word.endswith(before):
-                stem = word[(-1 * len(before))]
+            if word.endswith(before) and len(word) != len(before):
+                stem = word[:(-1 * len(before))]
                 stem += after
                 if count: 
                     return (stem, True, iterations)
@@ -54,16 +54,20 @@ def manipulate(word, cases, count = False):
                     return (word, False, 0)
                 else:
                     return (word, False)
+    if count:
+        return (word, False, 0)
+    else:
+        return (word, False)
 
 # Steps
 def step1(word):
     a,b = (False, False)
+    #a
     nd = not d(word)
     cases = (
              (nd, 'SSES','SS'), (nd,'IES', 'I'), 
-             (nd, 'SS', 'SS'), (nd, 'S','')
+             (nd, 'SS', 'SS'), (nd, 'S','') 
             )
-    #a
     word, a = manipulate(word, cases)
 
     #b
@@ -71,26 +75,20 @@ def step1(word):
         cases = (
                  (m(word)>0, 'EED', 'EE'), 
                  (v(word),'ED', ''),
-                 (v(word), 'ING', '') 
+                 (v(word), 'ING', ''), 
+                 ((word[-1] == 'Y' and v(word[:-1])), 'Y', 'I') # Section C
                 )
         word, b, part2 = manipulate(word, cases, True)
 
-        if part2 > 1:
+        if part2 > 1 and part2 < 4:
             cases = (
                      (True, 'AT', 'ATE'), 
                      (True,'BL', 'BLE'),
                      (True, 'IZ', 'IZE'), 
-                     (d(word, True), word[-1], ''), )
+                     (d(word, True), word[-1], ''), 
                      ((m(word)>1 and o(word)), '', 'E') 
                     )
             word = manipulate(word, cases)[0]
-
-    #c
-    if not a and not b:
-        c1 = word[-1] == 'Y' and v(word[:-1])
-        case = (c1, 'Y', 'I')
-        word = manipulate(word, case)[0]
-
     return word
         
 
@@ -123,7 +121,7 @@ def step2(word):
     return word
 
 def step3(word):
-     cases = (
+    cases = (
              (True, 'ICATE', 'IC'),
              (True, 'ATIVE', ''),
              (True, 'ALIZE', 'AL'),
@@ -131,13 +129,13 @@ def step3(word):
              (True, 'ICAL', 'IC'),
              (True, 'FUL', ''),
              (True, 'NESS', '')
-            )
+             )
     if m(word) > 0:
         word = manipulate(word, cases)[0]
     return word
 
 def step4(word):
-      cases = (
+    cases = (
              (True, 'AL', ''),
              (True, 'ANCE', ''),
              (True, 'ENCE', ''),
@@ -164,7 +162,7 @@ def step4(word):
     return word
 
 def step5(word):
-     cases = (
+    cases = (
              (m(word) > 1, 'E', ''),
              ((m(word) == 1 and not o(word)), 'E', ''),
              ((m(word) > 1 and d(word) and word[-1] == 'L'), 'LL', 'L'),
