@@ -6,6 +6,7 @@ with open(sys.argv[1], 'r') as input:
     input = re.sub(r'<.*>', r' ', input)
     input = input.upper()
     input = re.findall(r'\b(?:[A-Z](?:(?:\.|\')[A-Z])?)+\'?\b', input)
+    input = stem.stemmer(input)
     d = {}
     for stem in input:
         if stem not in d:
@@ -13,7 +14,7 @@ with open(sys.argv[1], 'r') as input:
         else:
             d[stem] += 1
     high = 0 #iterator for dictionary starting at highest number
-    o = '' #string to be passed into output
+    o = '' #string where output will be passed to.    
     for k, v in d.items():
         if v > high:
             high = v
