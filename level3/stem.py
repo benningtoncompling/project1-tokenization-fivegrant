@@ -39,21 +39,20 @@ def m(w):
 #The tuple allows for iteration return and ordered looping 
 def manipulate(word, cases, count = False):
     iterations = 0
+    print(word) #######3
     for condition, before, after in cases:
+        print(str(condition) + ': ' + before + '->' +after) #######3
         iterations += 1
         if condition:
             if word.endswith(before) and len(word) != len(before):
                 stem = word[:(-1 * len(before))]
                 stem += after
                 if count: 
+                    print('change: ' + stem)#######3
                     return (stem, True, iterations)
                 else:
+                    print('change: ' + stem)#######3
                     return (stem, True)
-            else:
-                if count:
-                    return (word, False, 0)
-                else:
-                    return (word, False)
     if count:
         return (word, False, 0)
     else:
